@@ -1,0 +1,35 @@
+<div class="flex min-h-[calc(100vh-73px)] bg-gray-50">
+  <div class="flex-1 flex flex-col">
+    
+    <header class="px-6 py-4 bg-white border-b border-gray-200 mb-6 flex justify-between items-center">
+        <h1 class="text-xl font-bold text-gray-800">สินค้าทั้งหมด ({{ products().length }})</h1>
+    </header>
+
+    <main class="flex-1 px-6 pb-6 overflow-y-auto">
+      
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        
+        @for (product of products(); track product.id) {
+          <div class="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col h-full group">
+            
+            <div class="p-4 flex flex-col flex-1">
+                <div class="flex-1">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-1 line-clamp-1">{{ product.ProductName }}</h3>
+                </div>
+                
+                <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
+                    <span class="text-lg font-bold text-blue-600">฿{{ product.UnitPrice.toLocaleString() }}</span>
+                    
+                    <button (click)="addToCart(product)" 
+                            class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 active:scale-95 transition-all shadow-sm">
+                        เพิ่มลงตะกร้า
+                    </button>
+                </div>
+            </div>
+
+          </div>
+        }
+      </div>
+    </main>
+  </div>
+</div>

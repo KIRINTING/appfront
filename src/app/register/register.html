@@ -1,0 +1,140 @@
+<div
+    class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="w-full max-w-2xl bg-white rounded-2xl shadow-xl overflow-hidden">
+
+        <div class="bg-blue-600 px-8 py-6 text-white">
+            <h2 class="text-3xl font-bold">Register Account</h2>
+            <p class="text-blue-100 mt-1 text-sm">Create your new account to get full access</p>
+        </div>
+
+        <div class="p-8 space-y-6">
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="col-span-1">
+                    <label for="Username" class="block text-sm font-medium text-gray-700 mb-1">Username</label>
+                    <input type="text" id="Username" [(ngModel)]="userData.username"
+                        class="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+                        placeholder="Somchai" />
+                </div>
+
+                <div class="col-span-1">
+                    <label for="Email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                    <input type="email" id="Email" [(ngModel)]="userData.email"
+                        class="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+                        placeholder="Somchai@example.com" />
+                </div>
+
+                <div class="col-span-1 md:col-span-2">
+                    <label for="FullName" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                    <input type="text" id="FullName" [(ngModel)]="userData.full_name"
+                        class="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+                        placeholder="Somchai Smonsri" />
+                </div>
+            </div>
+
+            <div class="relative py-2">
+                <div class="absolute inset-0 flex items-center">
+                    <div class="w-full border-t border-gray-200"></div>
+                </div>
+                <div class="relative flex justify-start">
+                    <span class="pr-2 bg-white text-sm text-gray-500 font-medium">Address Information</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="col-span-1 md:col-span-3">
+                    <label for="HouseNumber" class="block text-sm font-medium text-gray-700 mb-1">House Number /
+                        Street</label>
+                    <input type="text" id="HouseNumber"
+                        class="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+                        placeholder="123/45 Village No.5" />
+                </div>
+
+                <div class="col-span-1">
+                    <label for="provinces" class="block text-sm font-medium text-gray-700 mb-1" type="text">Province
+                        (จังหวัด)</label>
+                    <select id="provinces"
+                        class="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors appearance-none cursor-pointer"
+                        [(ngModel)]="selectedProvinceId" (change)="onProvinceChange()">
+                        <option [ngValue]="" disabled selected>Select Province</option>
+                        <option *ngFor="let p of provinces" [value]="p.id">
+                            {{ p.name_th }}
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-span-1">
+                    <label for="District" class="block text-sm font-medium text-gray-700 mb-1">District (อำเภอ)</label>
+                    <select id="District"
+                        class="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors appearance-none cursor-pointer"
+                        [(ngModel)]="selectedDistrictId" (change)="onDistrictChange()">
+                        <option [ngValue]="" disabled selected>Select District</option>
+                        <option *ngFor="let d of districts" [value]="d.id">
+                            {{ d.name_th }}
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-span-1">
+                    <label for="SubDistrict" class="block text-sm font-medium text-gray-700 mb-1">Sub-district
+                        (ตำบล)</label>
+                    <select id="SubDistrict"
+                        class="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors appearance-none cursor-pointer"
+                        [(ngModel)]="selectedSubDistrictId">
+                        <option value="" disabled selected>Select Sub-district</option>
+                        <option *ngFor="let s of subDistricts" [value]="s.id">
+                            {{ s.name_th }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="relative py-2">
+                <div class="absolute inset-0 flex items-center">
+                    <div class="w-full border-t border-gray-200"></div>
+                </div>
+                <div class="relative flex justify-start">
+                    <span class="pr-2 bg-white text-sm text-gray-500 font-medium">Security</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                    <input type="password" id="password" [(ngModel)]="userData.password"
+                        class="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+                        placeholder="•••••••••••••" />
+                </div>
+                <div>
+                    <label for="confirm-password" class="block text-sm font-medium text-gray-700 mb-1">Confirm
+                        Password</label>
+                    <input type="password" id="confirm-password"
+                        class="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+                        placeholder="•••••••••••••" />
+                </div>
+            </div>
+            <div class="pt-4 space-y-4">
+                <div class="flex items-center gap-2">
+                    <input type="checkbox" id="terms"
+                        class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 cursor-pointer"
+                        required>
+                    <label for="terms" class="text-sm text-gray-600 cursor-pointer">
+                        I agree to the <a href="#"
+                            class="text-blue-600 hover:text-blue-800 font-medium hover:underline">Terms and
+                            Conditions</a>
+                    </label>
+                </div>
+
+                <button type="submit" (click)="onRegister()"
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg shadow-md hover:shadow-lg transform transition hover:-translate-y-0.5 duration-200">
+                    Create Account
+                </button>
+            </div>
+
+            <div class="text-center text-sm text-gray-500 mt-6">
+                Already have an account?
+                <a href="login" class="font-semibold text-blue-600 hover:text-blue-800 hover:underline">Login here</a>
+            </div>
+        </div>
+    </div>
+</div>
