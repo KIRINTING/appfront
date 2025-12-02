@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../services/auth-service';
-
+import { CartService } from '../services/CartService'; // Import CartService
 
 interface User {
   id: number;
@@ -22,7 +22,6 @@ export interface Product {
   updated_at?: string;
 }
 
-
 @Component({
   selector: 'app-dashboard',
   imports: [CommonModule, FormsModule],
@@ -33,9 +32,9 @@ export class Dashboard {
 
   private http = inject(HttpClient);
   private authService = inject(AuthService);
-  products = signal<Product[]>([]);
+  private cartService = inject(CartService); // Inject CartService
 
-  // ตัวแปรเก็บข้อมูล (ใช้ Signal)
+  products = signal<Product[]>([]);
   users = signal<User[]>([]);
 
   ngOnInit() {
@@ -44,7 +43,6 @@ export class Dashboard {
   }
 
   fetchUsers() {
-    // เปลี่ยน URL ให้ตรงกับไฟล์ PHP ของคุณ
     this.http.get<User[]>('http://127.0.0.1:8000/api/register-show')
       .subscribe({
         next: (data) => {
@@ -64,10 +62,10 @@ export class Dashboard {
         console.error('Error fetching products:', err);
       }
     });
-
   }
 
   addToCart(product: Product) {
+    this.cartService.addToCart(product); // Add to cart functionality
     console.log('เพิ่มสินค้า:', product.ProductName);
   }
 

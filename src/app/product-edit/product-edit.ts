@@ -1,4 +1,3 @@
-// src/app/products/product-edit.ts
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -17,7 +16,8 @@ export class ProductEditComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
-  // ตัวแปรสำหรับเก็บข้อมูลที่จะแก้ไข
+  isEditMode = signal(false); // Signal to track mode
+
   productData = {
     id: 0,
     ProductCode: '',
@@ -26,53 +26,69 @@ export class ProductEditComponent implements OnInit {
     UnitPrice: 0
   };
 
-  // URL API หลัก (ต้องตรงกับ Backend ของคุณ)
-  // สมมติว่าใช้ URL นี้สำหรับการดึงรายตัวและอัปเดต
-  private apiUrl = 'http://127.0.0.1:8000/api/Products-edit';
+  // API Urls
+  private updateApiUrl = 'http://127.0.0.1:8000/api/Products-edit';
+  private createApiUrl = 'http://127.0.0.1:8000/api/Products-post'; 
 
   ngOnInit() {
-    // 1. ดึง ID จาก URL (เช่น /products/edit/5 -> ได้ id = 5)
     const id = this.route.snapshot.paramMap.get('id');
     
     if (id) {
+      this.isEditMode.set(true);
       this.loadProduct(id);
+    } else {
+      this.isEditMode.set(false);
     }
   }
-  // 2. โหลดข้อมูลสินค้าเดิมมาแสดงในฟอร์ม
-  loadProduct(id: string) {
-  // ✅ แก้ไข: เติม /${id} เพื่อดึงเฉพาะสินค้านั้น
-  this.http.get<any>(`${this.apiUrl}/${id}`).subscribe({
-    next: (data) => {
-      console.log('Original Data:', data);
-      this.productData = data; 
-    },
-    error: (err) => {
-      console.error('Error fetching product:', err);
-      alert('ไม่สามารถดึงข้อมูลสินค้าได้');
-      this.router.navigate(['/products']);
-    }
-  });
-}
 
-  // 3. บันทึกการแก้ไข (Update)
-  onSubmit() {
-    const id = this.productData.id;
-    
-    // ส่งข้อมูลแบบ PUT ไปที่ Backend
-    this.http.patch(`${this.apiUrl}/${id}`, this.productData).subscribe({
-      next: (res) => {
-        console.log('Update success:', res);
-        alert('แก้ไขข้อมูลสำเร็จ!');
-        this.router.navigate(['/products']); // กลับไปหน้ารายการ
+  // Load existing product
+  loadProduct(id: string) {
+    // Assuming GET request for a single item goes to the edit endpoint or similar
+    this.http.get<any>(`${this.updateApiUrl}/${id}`).subscribe({
+      next: (data) => {
+        console.log('Original Data:', data);
+        this.productData = data; 
       },
       error: (err) => {
-        console.error('Update failed:', err);
-        alert('เกิดข้อผิดพลาดในการบันทึกข้อมูล');
+        console.error('Error fetching product:', err);
+        alert('ไม่สามารถดึงข้อมูลสินค้าได้');
+        this.router.navigate(['/products']);
       }
     });
   }
 
-  // ปุ่มยกเลิก
+  // Handle Submit (Create or Update)
+  onSubmit() {
+    if (this.isEditMode()) {
+      // Update Mode (PATCH)
+      const id = this.productData.id;
+      this.http.patch(`${this.updateApiUrl}/${id}`, this.productData).subscribe({
+        next: (res) => {
+          console.log('Update success:', res);
+          alert('แก้ไขข้อมูลสำเร็จ!');
+          this.router.navigate(['/products']);
+        },
+        error: (err) => {
+          console.error('Update failed:', err);
+          alert('เกิดข้อผิดพลาดในการบันทึกข้อมูล');
+        }
+      });
+    } else {
+      // Create Mode (POST)
+      this.http.post(this.createApiUrl, this.productData).subscribe({
+        next: (res) => {
+          console.log('Create success:', res);
+          alert('เพิ่มสินค้าสำเร็จ!');
+          this.router.navigate(['/products']);
+        },
+        error: (err) => {
+          console.error('Create failed:', err);
+          alert('เกิดข้อผิดพลาดในการเพิ่มข้อมูล');
+        }
+      });
+    }
+  }
+
   onCancel() {
     this.router.navigate(['/products']);
   }

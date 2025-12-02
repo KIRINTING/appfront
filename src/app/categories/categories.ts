@@ -1,8 +1,8 @@
 import { Component, OnInit, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../services/auth-service'; // Import AuthService
 
-// 1. Interface ให้ตรงกับ Database ของคุณ (id, CategoriesName)
 export interface Category {
   id: number;
   CategoriesName: string;
@@ -12,19 +12,17 @@ export interface Category {
   selector: 'app-categories',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './categories.html', // อย่าลืมเปลี่ยนชื่อไฟล์ให้ตรง
+  templateUrl: './categories.html',
   styleUrl: './categories.css',
 })
 export class CategoriesComponent implements OnInit {
   
   private http = inject(HttpClient);
+  private authService = inject(AuthService); // Inject AuthService correctly
 
-  // 2. สร้างตัวแปร categories เป็น signal
   categories = signal<Category[]>([]);
 
-  // 3. เปลี่ยน URL เป็น API ของ Categories
   private apiUrl = 'http://127.0.0.1:8000/api/Categories-post'; 
-  authService: any;
 
   ngOnInit() {
     this.loadCategories();
