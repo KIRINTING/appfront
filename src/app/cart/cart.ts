@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CartService } from '../../services/CartService';
+import { CartService } from '../services/CartService';
 import { Router } from '@angular/router';
 
 @Component({
@@ -27,7 +27,7 @@ export class CartComponent {
     if (confirmCheckout) {
       alert('Payment Successful!');
       this.cartService.clearCart();
-      this.router.navigate(['/Admin/dashboard']);
+      this.router.navigate(['marketdashboard']);
     }
   }
 }

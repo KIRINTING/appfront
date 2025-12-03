@@ -2,6 +2,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { CartService } from '../services/CartService';
+import { Navbar } from '../components/navbar/navbar';
 
 // Interface สำหรับสินค้า (สามารถแยกไฟล์ model ได้ถ้าต้องการ)
 interface Product {
@@ -15,7 +16,7 @@ interface Product {
 @Component({
   selector: 'app-shop',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,Navbar],
   templateUrl: './marketdashboard.html'
 })
 export class Marketdashboard implements OnInit {
@@ -43,6 +44,9 @@ export class Marketdashboard implements OnInit {
 
   addToCart(product: Product) {
     this.cartService.addToCart(product);
-    // อาจเพิ่ม Alert หรือ Notification เล็กๆ ตรงนี้
+  }
+
+  hiddingitem(){
+    
   }
 }
