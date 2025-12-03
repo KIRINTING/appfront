@@ -1,6 +1,6 @@
 <nav class="bg-white shadow-sm border-b border-gray-200 px-6 py-4 flex justify-between items-center z-10 relative">
 
-    <div class="flex items-center gap-2">
+    <a href="/Admin/dashboard" class="flex items-center gap-2 cursor-pointer no-underline">
         <div class="bg-blue-600 text-white p-1.5 rounded-lg">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor">
@@ -8,12 +8,12 @@
             </svg>
         </div>
         <span class="text-xl font-bold text-gray-800">Online Shopping</span>
-    </div>
+    </a>
 
     <div class="flex items-center gap-4">
-        <div class="relative h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 border border-gray-200 cursor-pointer">
+        <a routerLink="/Admin/cart" class="relative h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 border border-gray-200 cursor-pointer hover:bg-blue-50 hover:text-blue-600 transition-colors">
 
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-800 dark:text-ba" aria-hidden="true"
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" aria-hidden="true"
                 fill="none" viewBox="0 0 24 24">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7H7.312" />
@@ -25,9 +25,7 @@
                 {{ cartService.count() }}
             </span>
             }
-
-            
-        </div>
+        </a>
 
         <div
             class="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 border border-gray-200">
