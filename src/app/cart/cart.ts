@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CartService } from '../services/CartService';
 import { Router } from '@angular/router';
+import { OrderService } from '../services/order-service';
 
 @Component({
   selector: 'app-cart',
@@ -12,6 +13,7 @@ import { Router } from '@angular/router';
 export class CartComponent {
   cartService = inject(CartService);
   private router = inject(Router);
+  orderService = inject(OrderService);
 
   removeItem(index: number) {
     this.cartService.removeFromCart(index);
@@ -22,12 +24,19 @@ export class CartComponent {
       alert('Your cart is empty!');
       return;
     }
-    
+
+    this.orderService.createOrder(
+      this.cartService.cartItems(),
+      this.cartService.totalPrice()
+    );
+
     const confirmCheckout = confirm(`Confirm payment of ฿${this.cartService.totalPrice().toLocaleString()}?`);
     if (confirmCheckout) {
       alert('Payment Successful!');
       this.cartService.clearCart();
-      this.router.navigate(['marketdashboard']);
+      this.router.navigate(['bill']);
     }
   }
+
+
 }

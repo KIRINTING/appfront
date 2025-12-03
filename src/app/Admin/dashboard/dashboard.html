@@ -2,34 +2,74 @@
   <div class="flex-1 flex flex-col">
     
     <header class="px-6 py-4 bg-white border-b border-gray-200 mb-6 flex justify-between items-center">
-        <h1 class="text-xl font-bold text-gray-800">สินค้าทั้งหมด ({{ products().length }})</h1>
+        <h1 class="text-xl font-bold text-gray-800">
+            Order Management (รายการคำสั่งซื้อทั้งหมด {{ orders().length }})
+        </h1>
     </header>
 
     <main class="flex-1 px-6 pb-6 overflow-y-auto">
       
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        
-        @for (product of products(); track product.id) {
-          <div class="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col h-full group">
-            
-            <div class="p-4 flex flex-col flex-1">
-                <div class="flex-1">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-1 line-clamp-1">{{ product.ProductName }}</h3>
-                </div>
-                
-                <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
-                    <span class="text-lg font-bold text-blue-600">฿{{ product.UnitPrice.toLocaleString() }}</span>
-                    
-                    <button (click)="addToCart(product)" 
-                            class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 active:scale-95 transition-all shadow-sm">
-                        เพิ่มลงตะกร้า
-                    </button>
-                </div>
-            </div>
+      <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50 border-b border-gray-200">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Order ID</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Customer</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Date</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Total Amount</th>
+              <th class="px-6 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Payment Status</th>
+              <th class="px-6 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200 bg-white text-gray-600">
+            @for (order of orders(); track order.id) {
+              <tr class="hover:bg-blue-50/50 transition-colors">
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    #{{ order.id }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                    {{ order.customerName }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {{ order.orderDate }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-blue-600">
+                    ฿{{ order.totalAmount.toLocaleString() }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-center">
+                  @if (order.paymentStatus === 'Paid') {
+                    <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 border border-green-200">
+                      <svg class="w-3 h-3 mr-1 self-center" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                      Paid (จ่ายแล้ว)
+                    </span>
+                  } @else {
+                    <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800 border border-red-200">
+                      <svg class="w-3 h-3 mr-1 self-center" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                      Unpaid (ยังไม่จ่าย)
+                    </span>
+                  }
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                  <button (click)="togglePaymentStatus(order)" 
+                          class="text-indigo-600 hover:text-indigo-900 bg-indigo-50 px-3 py-1 rounded-md hover:bg-indigo-100 transition-colors cursor-pointer">
+                    Change Status
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
 
-          </div>
+        @if (orders().length === 0) {
+            <div class="p-8 text-center text-gray-500">
+                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+                <p class="mt-2 text-sm">No orders found.</p>
+            </div>
         }
       </div>
+
     </main>
   </div>
 </div>

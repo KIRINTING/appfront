@@ -1,78 +1,69 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { AuthService } from '../../services/auth-service';
-import { CartService } from '../../services/CartService'; // Import CartService
 
-interface User {
+// กำหนดรูปแบบข้อมูล Order
+interface Order {
   id: number;
-  username: string;
-  email: string;
-  full_name: string;
-}
-
-export interface Product {
-  id: number;
-  ProductCode: string;
-  ProductName: string;
-  CategoriesID: number;
-  UnitPrice: number;
-  created_at?: string;
-  updated_at?: string;
+  customerName: string;
+  totalAmount: number;
+  orderDate: string;
+  paymentStatus: 'Paid' | 'Unpaid'; // สถานะ: จ่ายแล้ว หรือ ยังไม่จ่าย
 }
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CommonModule, FormsModule],
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
-export class Dashboard {
-
+export class Dashboard implements OnInit {
+  
   private http = inject(HttpClient);
-  private authService = inject(AuthService);
-  private cartService = inject(CartService); // Inject CartService
 
-  products = signal<Product[]>([]);
-  users = signal<User[]>([]);
+  // ใช้ Signal สำหรับเก็บรายการ Order
+  orders = signal<Order[]>([]);
+
+  // URL API (ตัวอย่าง: คุณต้องเปลี่ยนเป็น API ของคุณเมื่อพร้อม)
+  private apiUrl = 'http://127.0.0.1:8000/api/orders'; 
 
   ngOnInit() {
-    this.fetchUsers();
-    this.showProducts();
+    this.loadOrders();
   }
 
-  fetchUsers() {
-    this.http.get<User[]>('http://127.0.0.1:8000/api/register-show')
-      .subscribe({
-        next: (data) => {
-          this.users.set(data);
-        },
-        error: (err) => console.error('Error fetching data:', err)
-      });
-  }
+  loadOrders() {
+    // --- จำลองข้อมูล (Mock Data) ---
+    // เนื่องจากยังไม่มี API Order จริง ให้ใช้ข้อมูลนี้ทดสอบการแสดงผล
+    // const mockOrders: Order[] = [
+    //   { id: 1001, customerName: 'Somchai', totalAmount: 1500, orderDate: '2025-03-01', paymentStatus: 'Paid' },
+    //   { id: 1002, customerName: 'Somsri', totalAmount: 590, orderDate: '2025-03-02', paymentStatus: 'Unpaid' },
+    //   { id: 1003, customerName: 'John Doe', totalAmount: 3200, orderDate: '2025-03-02', paymentStatus: 'Unpaid' },
+    //   { id: 1004, customerName: 'Jane Smith', totalAmount: 850, orderDate: '2025-03-03', paymentStatus: 'Paid' },
+    //   { id: 1005, customerName: 'Wichai', totalAmount: 120, orderDate: '2025-03-03', paymentStatus: 'Paid' },
+    //   { id: 1006, customerName: 'Anucha', totalAmount: 1500, orderDate: '2025-11-01', paymentStatus: 'Paid' },
+    //   { id: 1007, customerName: 'Kanchitpol', totalAmount: 2540, orderDate: '2025-01-01', paymentStatus: 'Paid' },
+    //   { id: 1008, customerName: 'Panuwit', totalAmount: 74000, orderDate: '2025-12-03', paymentStatus: 'Paid' },
+    // ];
+    // this.orders.set(mockOrders);
 
-  showProducts() {
-    this.http.get<Product[]>('http://127.0.0.1:8000/api/Products-post').subscribe({
+    // --- ถ้ามี API จริง ให้เปิดใช้โค้ดด้านล่างนี้แทน ---
+
+    this.http.get<Order[]>(this.apiUrl).subscribe({
       next: (data) => {
-        console.log('Product Data:', data);
-        this.products.set(data);
+        this.orders.set(data);
       },
-      error: (err) => {
-        console.error('Error fetching products:', err);
-      }
+      error: (err) => console.error('Error fetching orders:', err)
     });
   }
 
-  addToCart(product: Product) {
-    this.cartService.addToCart(product); // Add to cart functionality
-    console.log('เพิ่มสินค้า:', product.ProductName);
-  }
-
-  onLogout() {
-    const confirmLogout = confirm('ต้องการออกจากระบบใช่ไหม?');
-    if (confirmLogout) {
-      this.authService.logout();
-    }
+  // ฟังก์ชันสำหรับเปลี่ยนสถานะ (จำลองการทำงาน)
+  togglePaymentStatus(order: Order) {
+    const newStatus = order.paymentStatus === 'Paid' ? 'Unpaid' : 'Paid';
+    
+    // อัปเดตข้อมูลใน Signal (ในความเป็นจริงควรยิง API ไปอัปเดตหลังบ้านด้วย)
+    this.orders.update(items => 
+      items.map(item => item.id === order.id ? { ...item, paymentStatus: newStatus } : item)
+    );
   }
 }

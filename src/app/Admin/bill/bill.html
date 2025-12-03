@@ -1,0 +1,63 @@
+<div class="max-w-3xl mx-auto p-8 bg-white shadow-lg rounded-xl border border-gray-200 mt-6 print:shadow-none print:border-none">
+    
+    <div class="flex justify-between items-start mb-8 border-b pb-6">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-800">INVOICE / ใบแจ้งหนี้</h1>
+            <p class="text-gray-500 mt-1">บริษัท ของคุณ จำกัด</p>
+        </div>
+        <div class="text-right">
+            <h2 class="text-xl font-semibold text-gray-700">#{{ order()?.orderId }}</h2>
+            <p class="text-sm text-gray-500">วันที่: {{ order()?.date | date:'dd/MM/yyyy HH:mm' }}</p>
+            
+            <div class="mt-2 inline-block px-3 py-1 rounded-full text-sm font-bold border"
+                 [ngClass]="{
+                    'bg-yellow-100 text-yellow-700 border-yellow-200': order()?.status === 'Pending',
+                    'bg-green-100 text-green-700 border-green-200': order()?.status === 'Paid'
+                 }">
+                {{ order()?.status === 'Pending' ? 'รอชำระเงิน (Pending)' : 'จ่ายแล้ว (Paid)' }}
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-8">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">สินค้า</th>
+                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">ราคา</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200 bg-white">
+                @for (item of order()?.items; track $index) {
+                <tr>
+                    <td class="px-6 py-4 text-sm text-gray-800">{{ item.ProductName }}</td>
+                    <td class="px-6 py-4 text-right text-sm text-gray-800">฿{{ item.UnitPrice | number:'1.2-2' }}</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="flex justify-end mb-8 border-t pt-4">
+        <div class="text-right">
+            <span class="text-gray-500 mr-4">ยอดสุทธิ</span>
+            <span class="text-2xl font-bold text-blue-600">฿{{ order()?.totalPrice | number:'1.2-2' }}</span>
+        </div>
+    </div>
+
+    <div class="flex justify-end gap-4 print:hidden">
+        <button (click)="goBack()" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition">
+            กลับ
+        </button>
+        
+        <button (click)="onPrint()" class="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition">
+            พิมพ์ใบเสร็จ
+        </button>
+
+        @if (order()?.status === 'Pending') {
+            <button (click)="onPay()" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 shadow-md transition transform active:scale-95 font-bold">
+                ยืนยันการจ่ายเงิน
+            </button>
+        }
+    </div>
+</div>
