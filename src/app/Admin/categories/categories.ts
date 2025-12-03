@@ -1,7 +1,7 @@
 import { Component, OnInit, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { AuthService } from '../services/auth-service'; // Import AuthService
+import { AuthService } from '../../services/auth-service'; // Import AuthService
 
 export interface Category {
   id: number;

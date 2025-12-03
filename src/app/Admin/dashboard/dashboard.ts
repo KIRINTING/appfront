@@ -2,8 +2,8 @@ import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { AuthService } from '../services/auth-service';
-import { CartService } from '../services/CartService'; // Import CartService
+import { AuthService } from '../../services/auth-service';
+import { CartService } from '../../services/CartService'; // Import CartService
 
 interface User {
   id: number;

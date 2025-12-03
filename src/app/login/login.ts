@@ -34,7 +34,7 @@ export class Login {
         if (res.token) {
         localStorage.setItem('auth_token', res.token);
       }
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['/Admin/dashboard']);
       },
       error: (error) => {
         console.error('Login ล้มเหลว:', error);

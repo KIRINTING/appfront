@@ -21,8 +21,8 @@ export class Navbar {
       this.authService.logout();
     }
   }
-  onAddCart(){
-    
+
+  onClick(){
   }
 
 }
